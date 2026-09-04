@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OA Early Detection</title>
+</head>
+
+<body>
+
+    <h1>OA Early Detection System</h1>
+    <p>ESP32 + AD5933</p>
+
+    <h2>Sensor Data</h2>
+
+    <p>Impedance: <span id="impedance">Loading...</span> Ω</p>
+    <p>Frequency: <span id="frequency">Loading...</span> Hz</p>
+    <p>Phase: <span id="phase">Loading...</span> °</p>
+
+    <p id="status">Connecting to Firebase...</p>
+
+    <script type="module">
+
+        import { initializeApp }
+            from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+
+        import {
+            getDatabase,
+            ref,
+            onValue
+        }
+            from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
+
+
+        // KEEP YOUR EXISTING FIREBASE CONFIG HERE
+        const firebaseConfig = {
+  apiKey: "AIzaSyAqV7ug-2GweTmsuVsw4-jfPZZN89Ixro4",
+  authDomain: "oa-early-detection-5c20b.firebaseapp.com",
+  databaseURL: "https://oa-early-detection-5c20b-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "oa-early-detection-5c20b",
+  storageBucket: "oa-early-detection-5c20b.firebasestorage.app",
+  messagingSenderId: "114789054894",
+  appId: "1:114789054894:web:b5debaddfccb84287d303f"
+};
+
+
+        // Connect to Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+
+        // Location of sensor data
+        const sensorRef = ref(database, "sensorData/ESP32_01");
+
+
+        // Read sensor data
+        onValue(sensorRef, (snapshot) => {
+
+            const data = snapshot.val();
+
+            if (data) {
+
+                document.getElementById("impedance").innerText =
+                    data.impedance;
+
+                document.getElementById("frequency").innerText =
+                    data.frequency;
+
+                document.getElementById("phase").innerText =
+                    data.phase;
+
+                document.getElementById("status").innerText =
+                    "Firebase connected successfully!";
+
+            }
+
+        });
+
+    </script>
+
+</body>
+</html>
