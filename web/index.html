@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OA Early Detection</title>
+</head>
+
+<body>
+
+    <h1>OA Early Detection System</h1>
+
+    <p>ESP32 + AD5933</p>
+
+    <h2>Firebase Connection</h2>
+
+    <p id="status">Connecting to Firebase...</p>
+
+    <script type="module">
+
+        // Firebase libraries
+        import { initializeApp }
+            from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+
+        import {
+            getDatabase,
+            ref,
+            set
+        }
+            from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
+
+
+        // ==========================================
+        // YOUR FIREBASE CONFIGURATION
+        // ==========================================
+
+        const firebaseConfig = {
+  apiKey: "AIzaSyBDWqeb9PY75R6prx8UsU9etRybtW6yDdU",
+  authDomain: "oa-early-detection.firebaseapp.com",
+  databaseURL: "https://oa-early-detection-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "oa-early-detection",
+  storageBucket: "oa-early-detection.firebasestorage.app",
+  messagingSenderId: "549737723430",
+  appId: "1:549737723430:web:0585b40aa06677624118e7"
+};
+
+
+        // Start Firebase
+        const app = initializeApp(firebaseConfig);
+
+        // Connect to Realtime Database
+        const database = getDatabase(app);
+
+
+        // Test connection by writing data
+        const testData = ref(database, "test/connection");
+
+        set(testData, {
+            message: "Website connected successfully!",
+            time: new Date().toISOString()
+        })
+        .then(() => {
+            document.getElementById("status").innerText =
+                "Firebase connected successfully!";
+        })
+        .catch((error) => {
+            document.getElementById("status").innerText =
+                "Firebase connection failed: " + error.message;
+        });
+
+    </script>
+
+</body>
+</html>
