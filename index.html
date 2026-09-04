@@ -1,189 +1,242 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OA Early Detection</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f2f5f7;
-            margin: 0;
-            padding: 20px;
-            text-align: center;
-        }
+  <title>OA Early Detection</title>
 
-        .container {
-            max-width: 600px;
-            margin: auto;
-        }
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f5f7;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
 
-        .card {
-            background: white;
-            padding: 20px;
-            margin: 15px 0;
-            border-radius: 15px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-        }
+    .container {
+      max-width: 900px;
+      margin: auto;
+    }
 
-        input {
-            width: 90%;
-            padding: 12px;
-            margin: 8px 0;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-        }
+    h1 {
+      margin-bottom: 10px;
+    }
 
-        button {
-            padding: 12px 20px;
-            margin: 8px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-        }
+    .box {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      margin-top: 25px;
+    }
 
-        .hidden {
-            display: none;
-        }
+    input {
+      width: 90%;
+      max-width: 500px;
+      padding: 15px;
+      margin: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
 
-        .value {
-            font-size: 30px;
-            font-weight: bold;
-        }
+    button {
+      padding: 13px 25px;
+      margin: 8px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
 
-        .unit {
-            color: #666;
-        }
+    .login-btn {
+      background: #4CAF50;
+      color: white;
+    }
 
-        .status {
-            font-size: 24px;
-            font-weight: bold;
-        }
-    </style>
+    .create-btn {
+      background: #2196F3;
+      color: white;
+    }
+
+    .logout-btn {
+      background: #f44336;
+      color: white;
+    }
+
+    .resend-btn {
+      background: #ff9800;
+      color: white;
+    }
+
+    #message {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    #dashboard {
+      display: none;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 25px;
+    }
+
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+
+    .card h2 {
+      margin: 5px 0;
+      font-size: 32px;
+    }
+
+    .card p {
+      margin: 5px;
+      color: #555;
+    }
+
+    .status {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .online {
+      color: green;
+    }
+
+    .offline {
+      color: red;
+    }
+  </style>
 </head>
 
 <body>
 
 <div class="container">
 
-    <!-- LOGIN -->
-    <div id="loginSection" class="card">
+  <h1>OA Early Detection</h1>
 
-        <h1>OA Early Detection</h1>
-        <h2>Login</h2>
+  <!-- LOGIN SECTION -->
+  <div id="loginBox" class="box">
 
-        <input
-            type="email"
-            id="email"
-            placeholder="Email"
-        >
+    <h2>Login</h2>
 
-        <input
-            type="password"
-            id="password"
-            placeholder="Password"
-        >
+    <input
+      type="email"
+      id="email"
+      placeholder="Enter your email"
+    >
 
-        <br>
+    <input
+      type="password"
+      id="password"
+      placeholder="Enter your password"
+    >
 
-        <button id="loginButton">
-            Login
-        </button>
+    <br>
 
-        <button id="signupButton">
-            Create Account
-        </button>
+    <button class="login-btn" id="loginBtn">
+      Login
+    </button>
 
-        <p id="authMessage"></p>
+    <button class="create-btn" id="createBtn">
+      Create Account
+    </button>
+
+    <button
+      class="resend-btn"
+      id="resendBtn"
+      style="display:none;"
+    >
+      Resend Verification Email
+    </button>
+
+    <p id="message"></p>
+
+  </div>
+
+
+  <!-- DASHBOARD -->
+  <div id="dashboard" class="box">
+
+    <h2>OA Sensor Dashboard</h2>
+
+    <p>
+      Logged in as:
+      <strong id="userEmail"></strong>
+    </p>
+
+    <button class="logout-btn" id="logoutBtn">
+      Logout
+    </button>
+
+    <div class="cards">
+
+      <div class="card">
+        <p>Impedance</p>
+        <h2>
+          <span id="impedance">--</span>
+        </h2>
+        <p>Ω</p>
+      </div>
+
+      <div class="card">
+        <p>Frequency</p>
+        <h2>
+          <span id="frequency">--</span>
+        </h2>
+        <p>Hz</p>
+      </div>
+
+      <div class="card">
+        <p>Phase</p>
+        <h2>
+          <span id="phase">--</span>
+        </h2>
+        <p>°</p>
+      </div>
+
+      <div class="card">
+        <p>Status</p>
+        <h2 class="status online" id="status">
+          ONLINE
+        </h2>
+      </div>
 
     </div>
 
+    <p>
+      Last update:
+      <strong id="lastUpdate">--</strong>
+    </p>
 
-    <!-- DASHBOARD -->
-    <div id="dashboardSection" class="hidden">
-
-        <h1>OA Early Detection</h1>
-
-        <p>ESP32 + AD5933 Monitoring System</p>
-
-        <div class="card">
-            <h2>Impedance</h2>
-            <div class="value">
-                <span id="impedance">Loading...</span>
-            </div>
-            <div class="unit">Ω</div>
-        </div>
-
-        <div class="card">
-            <h2>Frequency</h2>
-            <div class="value">
-                <span id="frequency">Loading...</span>
-            </div>
-            <div class="unit">Hz</div>
-        </div>
-
-        <div class="card">
-            <h2>Phase</h2>
-            <div class="value">
-                <span id="phase">Loading...</span>
-            </div>
-            <div class="unit">degrees</div>
-        </div>
-
-        <div class="card">
-            <h2>Status</h2>
-
-            <div id="status" class="status">
-                Monitoring
-            </div>
-
-            <p id="statusMessage">
-                Waiting for sensor data
-            </p>
-        </div>
-
-        <div class="card">
-            <h3>Last Update</h3>
-            <p id="lastUpdate">Waiting...</p>
-
-            <button id="logoutButton">
-                Logout
-            </button>
-        </div>
-
-    </div>
+  </div>
 
 </div>
 
 
 <script type="module">
 
-    import { initializeApp }
-        from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+  /* =====================================================
+     FIREBASE CONFIGURATION
+     =====================================================
 
-    import {
-        getDatabase,
-        ref,
-        onValue
-    }
-        from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
+     IMPORTANT:
+     Replace ONLY the values below with the Firebase
+     configuration you already used in your old working file.
+  */
 
-    import {
-        getAuth,
-        signInWithEmailAndPassword,
-        createUserWithEmailAndPassword,
-        sendEmailVerification,
-        signOut,
-        onAuthStateChanged
-    }
-        from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
-
-
-    // ==================================================
-    // PUT YOUR EXISTING FIREBASE CONFIG HERE
-    // ==================================================
-
-    const firebaseConfig = {
+  const firebaseConfig = {
   apiKey: "AIzaSyAqV7ug-2GweTmsuVsw4-jfPZZN89Ixro4",
   authDomain: "oa-early-detection-5c20b.firebaseapp.com",
   databaseURL: "https://oa-early-detection-5c20b-default-rtdb.europe-west1.firebasedatabase.app",
@@ -193,210 +246,358 @@
   appId: "1:114789054894:web:b5debaddfccb84287d303f"
 };
 
-    // ==================================================
-    // FIREBASE SETUP
-    // ==================================================
 
-    const app = initializeApp(firebaseConfig);
+  /* =====================================================
+     FIREBASE IMPORTS
+     ===================================================== */
 
-    const database = getDatabase(app);
+  import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
-    const auth = getAuth(app);
+  import {
+    getDatabase,
+    ref,
+    onValue
+  }
+    from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
 
-
-    // ==================================================
-    // HTML ELEMENTS
-    // ==================================================
-
-    const loginSection =
-        document.getElementById("loginSection");
-
-    const dashboardSection =
-        document.getElementById("dashboardSection");
-
-    const emailInput =
-        document.getElementById("email");
-
-    const passwordInput =
-        document.getElementById("password");
-
-    const authMessage =
-        document.getElementById("authMessage");
+  import {
+    getAuth,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    sendEmailVerification,
+    signOut,
+    onAuthStateChanged
+  }
+    from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
 
-    // ==================================================
-    // CREATE ACCOUNT
-    // ==================================================
+  /* =====================================================
+     INITIALIZE FIREBASE
+     ===================================================== */
 
-    document.getElementById("signupButton")
-        .addEventListener("click", async () => {
+  const app = initializeApp(firebaseConfig);
 
-            const email = emailInput.value;
+  const database = getDatabase(app);
 
-            const password = passwordInput.value;
-
-            if (!email || !password) {
-
-                authMessage.innerText =
-                    "Enter email and password.";
-
-                return;
-            }
-
-            try {
-
-                const userCredential =
-                    await createUserWithEmailAndPassword(
-                        auth,
-                        email,
-                        password
-                    );
-
-                await sendEmailVerification(
-                    userCredential.user
-                );
-
-                authMessage.innerText =
-                    "Account created! Please check your email and verify your account.";
-
-            } catch (error) {
-
-                authMessage.innerText =
-                    error.message;
-
-            }
-
-        });
+  const auth = getAuth(app);
 
 
-    // ==================================================
-    // LOGIN
-    // ==================================================
+  /* =====================================================
+     HTML ELEMENTS
+     ===================================================== */
 
-    document.getElementById("loginButton")
-        .addEventListener("click", async () => {
+  const loginBox = document.getElementById("loginBox");
 
-            const email = emailInput.value;
+  const dashboard = document.getElementById("dashboard");
 
-            const password = passwordInput.value;
+  const emailInput = document.getElementById("email");
 
-            if (!email || !password) {
+  const passwordInput = document.getElementById("password");
 
-                authMessage.innerText =
-                    "Enter email and password.";
+  const loginBtn = document.getElementById("loginBtn");
 
-                return;
-            }
+  const createBtn = document.getElementById("createBtn");
 
-            try {
+  const resendBtn = document.getElementById("resendBtn");
 
-                const userCredential =
-                    await signInWithEmailAndPassword(
-                        auth,
-                        email,
-                        password
-                    );
+  const logoutBtn = document.getElementById("logoutBtn");
 
-                if (!userCredential.user.emailVerified) {
+  const message = document.getElementById("message");
 
-                    authMessage.innerText =
-                        "Please verify your email before logging in.";
-
-                    await signOut(auth);
-
-                    return;
-                }
-
-                authMessage.innerText =
-                    "Login successful!";
-
-            } catch (error) {
-
-                authMessage.innerText =
-                    error.message;
-
-            }
-
-        });
+  const userEmail = document.getElementById("userEmail");
 
 
-    // ==================================================
-    // LOGOUT
-    // ==================================================
+  /* =====================================================
+     CREATE ACCOUNT
+     ===================================================== */
 
-    document.getElementById("logoutButton")
-        .addEventListener("click", async () => {
+  createBtn.addEventListener("click", async () => {
 
-            await signOut(auth);
+    const email = emailInput.value.trim();
 
-        });
+    const password = passwordInput.value.trim();
+
+    if (!email || !password) {
+
+      message.innerText =
+        "Please enter email and password.";
+
+      return;
+    }
+
+    try {
+
+      const userCredential =
+        await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+      const user = userCredential.user;
+
+      await sendEmailVerification(user);
+
+      message.innerText =
+        "Account created. Verification email sent. Please check your email.";
+
+      await signOut(auth);
+
+    }
+
+    catch (error) {
+
+      console.error(error);
+
+      message.innerText =
+        "Firebase: " + error.message;
+
+    }
+
+  });
 
 
-    // ==================================================
-    // CHECK LOGIN STATUS
-    // ==================================================
+  /* =====================================================
+     LOGIN
+     ===================================================== */
 
-    onAuthStateChanged(auth, (user) => {
+  loginBtn.addEventListener("click", async () => {
 
-        if (user && user.emailVerified) {
+    const email = emailInput.value.trim();
 
-            loginSection.classList.add("hidden");
+    const password = passwordInput.value.trim();
 
-            dashboardSection.classList.remove("hidden");
+    if (!email || !password) {
 
-            loadSensorData();
+      message.innerText =
+        "Please enter email and password.";
 
-        } else {
+      return;
+    }
 
-            loginSection.classList.remove("hidden");
+    try {
 
-            dashboardSection.classList.add("hidden");
+      const userCredential =
+        await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+      const user = userCredential.user;
+
+
+      /* -----------------------------------------------
+         CHECK EMAIL VERIFICATION
+         ----------------------------------------------- */
+
+      if (!user.emailVerified) {
+
+        try {
+
+          await sendEmailVerification(user);
+
+          message.innerText =
+            "Your email is not verified. A new verification email has been sent. Please check your inbox and Spam folder.";
 
         }
 
-    });
+        catch (verificationError) {
+
+          console.error(verificationError);
+
+          message.innerText =
+            "Your email is not verified. Please check your inbox and Spam folder.";
+
+        }
+
+        await signOut(auth);
+
+        resendBtn.style.display = "none";
+
+        return;
+      }
 
 
-    // ==================================================
-    // LOAD SENSOR DATA
-    // ==================================================
+      /* -----------------------------------------------
+         VERIFIED USER
+         ----------------------------------------------- */
 
-    function loadSensorData() {
+      message.innerText =
+        "Login successful!";
 
-        const sensorRef =
-            ref(database, "sensorData/ESP32_01");
+      loginBox.style.display = "none";
 
+      dashboard.style.display = "block";
 
-        onValue(sensorRef, (snapshot) => {
+      userEmail.innerText = user.email;
 
-            const data = snapshot.val();
-
-            console.log("Firebase data:", data);
-
-
-            if (data) {
-
-                document.getElementById("impedance")
-                    .innerText =
-                    data.impedance ?? "N/A";
-
-                document.getElementById("frequency")
-                    .innerText =
-                    data.frequency ?? "N/A";
-
-                document.getElementById("phase")
-                    .innerText =
-                    data.phase ?? "N/A";
-
-                document.getElementById("lastUpdate")
-                    .innerText =
-                    new Date().toLocaleString();
-
-            }
-
-        });
+      loadSensorData();
 
     }
+
+    catch (error) {
+
+      console.error(error);
+
+      message.innerText =
+        "Firebase: " + error.message;
+
+    }
+
+  });
+
+
+  /* =====================================================
+     RESEND VERIFICATION EMAIL
+     ===================================================== */
+
+  resendBtn.addEventListener("click", async () => {
+
+    const email = emailInput.value.trim();
+
+    const password = passwordInput.value.trim();
+
+    if (!email || !password) {
+
+      message.innerText =
+        "Enter your email and password first.";
+
+      return;
+    }
+
+    try {
+
+      const userCredential =
+        await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+      const user = userCredential.user;
+
+      if (user.emailVerified) {
+
+        message.innerText =
+          "Your email is already verified. Please click Login.";
+
+        await signOut(auth);
+
+        return;
+      }
+
+      await sendEmailVerification(user);
+
+      message.innerText =
+        "Verification email sent again. Please check your inbox and Spam folder.";
+
+      await signOut(auth);
+
+    }
+
+    catch (error) {
+
+      console.error(error);
+
+      message.innerText =
+        "Firebase: " + error.message;
+
+    }
+
+  });
+
+
+  /* =====================================================
+     LOGOUT
+     ===================================================== */
+
+  logoutBtn.addEventListener("click", async () => {
+
+    await signOut(auth);
+
+    dashboard.style.display = "none";
+
+    loginBox.style.display = "block";
+
+    message.innerText =
+      "You have been logged out.";
+
+  });
+
+
+  /* =====================================================
+     AUTH STATE
+     ===================================================== */
+
+  onAuthStateChanged(auth, (user) => {
+
+    if (!user) {
+
+      dashboard.style.display = "none";
+
+      loginBox.style.display = "block";
+
+    }
+
+  });
+
+
+  /* =====================================================
+     READ SENSOR DATA FROM FIREBASE
+     ===================================================== */
+
+  function loadSensorData() {
+
+    const sensorRef =
+      ref(database, "sensorData/ESP32_01");
+
+    onValue(sensorRef, (snapshot) => {
+
+      const data = snapshot.val();
+
+      if (!data) {
+
+        document.getElementById("impedance").innerText = "--";
+
+        document.getElementById("frequency").innerText = "--";
+
+        document.getElementById("phase").innerText = "--";
+
+        document.getElementById("status").innerText =
+          "NO DATA";
+
+        document.getElementById("status").className =
+          "status offline";
+
+        return;
+      }
+
+
+      document.getElementById("impedance").innerText =
+        data.impedance ?? "--";
+
+      document.getElementById("frequency").innerText =
+        data.frequency ?? "--";
+
+      document.getElementById("phase").innerText =
+        data.phase ?? "--";
+
+
+      document.getElementById("status").innerText =
+        "ONLINE";
+
+      document.getElementById("status").className =
+        "status online";
+
+
+      document.getElementById("lastUpdate").innerText =
+        new Date().toLocaleString();
+
+    });
+
+  }
 
 </script>
 
