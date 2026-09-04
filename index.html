@@ -1,37 +1,143 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OA Early Detection</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f5f7;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+
+        h1 {
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .value {
+            font-size: 32px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .unit {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .status {
+            font-size: 25px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .normal {
+            color: green;
+        }
+
+        .warning {
+            color: orange;
+        }
+
+        .alert {
+            color: red;
+        }
+
+        #lastUpdate {
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
 </head>
 
 <body>
 
-    <h1>OA Early Detection System</h1>
-    <p>ESP32 + AD5933</p>
+<div class="container">
 
-    <h2>Sensor Data</h2>
+    <h1>OA Early Detection</h1>
+    <div class="subtitle">ESP32 + AD5933 Monitoring System</div>
 
-    <p>Impedance: <span id="impedance">Loading...</span> Ω</p>
-    <p>Frequency: <span id="frequency">Loading...</span> Hz</p>
-    <p>Phase: <span id="phase">Loading...</span> °</p>
+    <div class="card">
+        <h2>Impedance</h2>
+        <div class="value">
+            <span id="impedance">Loading...</span>
+        </div>
+        <div class="unit">Ω</div>
+    </div>
 
-    <p id="status">Connecting to Firebase...</p>
+    <div class="card">
+        <h2>Frequency</h2>
+        <div class="value">
+            <span id="frequency">Loading...</span>
+        </div>
+        <div class="unit">Hz</div>
+    </div>
 
-    <script type="module">
+    <div class="card">
+        <h2>Phase</h2>
+        <div class="value">
+            <span id="phase">Loading...</span>
+        </div>
+        <div class="unit">degrees</div>
+    </div>
 
-        import { initializeApp }
-            from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+    <div class="card">
+        <h2>Status</h2>
 
-        import {
-            getDatabase,
-            ref,
-            onValue
-        }
-            from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
+        <div id="status" class="status normal">
+            Monitoring
+        </div>
+
+        <p id="statusMessage">
+            Waiting for sensor data
+        </p>
+    </div>
+
+    <div class="card">
+        <h3>Last Update</h3>
+        <p id="lastUpdate">Waiting...</p>
+    </div>
+
+</div>
 
 
-        // KEEP YOUR EXISTING FIREBASE CONFIG HERE
-        const firebaseConfig = {
+<script type="module">
+
+    import { initializeApp }
+        from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+
+    import {
+        getDatabase,
+        ref,
+        onValue
+    }
+        from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
+
+
+    // KEEP YOUR EXISTING FIREBASE CONFIG HERE
+
+    const firebaseConfig = {
   apiKey: "AIzaSyAqV7ug-2GweTmsuVsw4-jfPZZN89Ixro4",
   authDomain: "oa-early-detection-5c20b.firebaseapp.com",
   databaseURL: "https://oa-early-detection-5c20b-default-rtdb.europe-west1.firebasedatabase.app",
@@ -42,39 +148,48 @@
 };
 
 
-        // Connect to Firebase
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
+    const app = initializeApp(firebaseConfig);
+
+    const database = getDatabase(app);
 
 
-        // Location of sensor data
-        const sensorRef = ref(database, "sensorData/ESP32_01");
+    const sensorRef =
+        ref(database, "sensorData/ESP32_01");
 
 
-        // Read sensor data
-        onValue(sensorRef, (snapshot) => {
+    onValue(sensorRef, (snapshot) => {
 
-            const data = snapshot.val();
+        const data = snapshot.val();
 
-            if (data) {
+        console.log("Firebase data:", data);
 
-                document.getElementById("impedance").innerText =
-                    data.impedance;
 
-                document.getElementById("frequency").innerText =
-                    data.frequency;
+        if (data) {
 
-                document.getElementById("phase").innerText =
-                    data.phase;
+            document.getElementById("impedance").innerText =
+                data.impedance ?? "N/A";
 
-                document.getElementById("status").innerText =
-                    "Firebase connected successfully!";
+            document.getElementById("frequency").innerText =
+                data.frequency ?? "N/A";
 
-            }
+            document.getElementById("phase").innerText =
+                data.phase ?? "N/A";
 
-        });
 
-    </script>
+            document.getElementById("lastUpdate").innerText =
+                new Date().toLocaleString();
+
+
+            document.getElementById("status").innerText =
+                "Monitoring";
+
+            document.getElementById("statusMessage").innerText =
+                "Sensor data received successfully.";
+        }
+
+    });
+
+</script>
 
 </body>
 </html>
