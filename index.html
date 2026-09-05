@@ -124,7 +124,7 @@
 
 <div class="container">
 
-  <h1>OA Early Detection</h1>
+  <h1>Osteotrack</h1>
 
   <!-- LOGIN SECTION -->
   <div id="loginBox" class="box">
@@ -180,41 +180,49 @@
       Logout
     </button>
 
+
     <div class="cards">
 
+      <!-- HEART RATE -->
       <div class="card">
-        <p>Impedance</p>
+        <p>❤️ Heart Rate</p>
+
         <h2>
-          <span id="impedance">--</span>
+          <span id="heartRate">--</span>
         </h2>
-        <p>Ω</p>
+
+        <p>BPM</p>
       </div>
 
+
+      <!-- SPO2 -->
       <div class="card">
-        <p>Frequency</p>
+        <p>🫁 SpO₂</p>
+
         <h2>
-          <span id="frequency">--</span>
+          <span id="spo2">--</span>
         </h2>
-        <p>Hz</p>
+
+        <p>%</p>
       </div>
 
-      <div class="card">
-        <p>Phase</p>
-        <h2>
-          <span id="phase">--</span>
-        </h2>
-        <p>degrees</p>
-      </div>
 
+      <!-- DEVICE STATUS -->
       <div class="card">
-        <p>Status</p>
-        <h2 class="status online" id="status">
-          ONLINE
+        <p>Device Status</p>
+
+        <h2
+          class="status offline"
+          id="status"
+        >
+          OFFLINE
         </h2>
       </div>
 
     </div>
 
+
+    <!-- LAST UPDATE -->
     <p>
       Last update:
       <strong id="lastUpdate">--</strong>
@@ -229,22 +237,17 @@
 
   /* =====================================================
      FIREBASE CONFIGURATION
-     =====================================================
-
-     IMPORTANT:
-     Replace ONLY the values below with the Firebase
-     configuration you already used in your old working file.
-  */
+     ===================================================== */
 
   const firebaseConfig = {
-  apiKey: "AIzaSyAqV7ug-2GweTmsuVsw4-jfPZZN89Ixro4",
-  authDomain: "oa-early-detection-5c20b.firebaseapp.com",
-  databaseURL: "https://oa-early-detection-5c20b-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "oa-early-detection-5c20b",
-  storageBucket: "oa-early-detection-5c20b.firebasestorage.app",
-  messagingSenderId: "114789054894",
-  appId: "1:114789054894:web:b5debaddfccb84287d303f"
-};
+    apiKey: "AIzaSyAqV7ug-2GweTmsuVsw4-jfPZZN89Ixro4",
+    authDomain: "oa-early-detection-5c20b.firebaseapp.com",
+    databaseURL: "https://oa-early-detection-5c20b-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "oa-early-detection-5c20b",
+    storageBucket: "oa-early-detection-5c20b.firebasestorage.app",
+    messagingSenderId: "114789054894",
+    appId: "1:114789054894:web:b5debaddfccb84287d303f"
+  };
 
 
   /* =====================================================
@@ -388,9 +391,7 @@
       const user = userCredential.user;
 
 
-      /* -----------------------------------------------
-         CHECK EMAIL VERIFICATION
-         ----------------------------------------------- */
+      /* CHECK EMAIL VERIFICATION */
 
       if (!user.emailVerified) {
 
@@ -414,15 +415,11 @@
 
         await signOut(auth);
 
-        resendBtn.style.display = "none";
-
         return;
       }
 
 
-      /* -----------------------------------------------
-         VERIFIED USER
-         ----------------------------------------------- */
+      /* VERIFIED USER */
 
       message.innerText =
         "Login successful!";
@@ -481,7 +478,7 @@
       if (user.emailVerified) {
 
         message.innerText =
-          "Your email is already verified. Please click Login.";
+          "Your email is already verified.";
 
         await signOut(auth);
 
@@ -545,7 +542,7 @@
 
 
   /* =====================================================
-     READ SENSOR DATA FROM FIREBASE
+     READ SENSOR DATA
      ===================================================== */
 
   function loadSensorData() {
@@ -559,31 +556,36 @@
 
       if (!data) {
 
-        document.getElementById("impedance").innerText = "--";
+        document.getElementById("heartRate").innerText = "--";
 
-        document.getElementById("frequency").innerText = "--";
-
-        document.getElementById("phase").innerText = "--";
+        document.getElementById("spo2").innerText = "--";
 
         document.getElementById("status").innerText =
-          "NO DATA";
+          "OFFLINE";
 
         document.getElementById("status").className =
           "status offline";
+
+        document.getElementById("lastUpdate").innerText =
+          "--";
 
         return;
       }
 
 
-      document.getElementById("impedance").innerText =
-        data.impedance ?? "--";
+      /* HEART RATE */
 
-      document.getElementById("frequency").innerText =
-        data.frequency ?? "--";
+      document.getElementById("heartRate").innerText =
+        data.heartRate ?? "--";
 
-      document.getElementById("phase").innerText =
-        data.phase ?? "--";
 
+      /* SpO2 */
+
+      document.getElementById("spo2").innerText =
+        data.spo2 ?? "--";
+
+
+      /* DEVICE STATUS */
 
       document.getElementById("status").innerText =
         "ONLINE";
@@ -592,8 +594,10 @@
         "status online";
 
 
+      /* TIMESTAMP */
+
       document.getElementById("lastUpdate").innerText =
-        new Date().toLocaleString();
+    new Date().toLocaleString();
 
     });
 
