@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Osteotrack</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      color: #222;
+    }
+
+    header {
+      background: #1f4e79;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 30px;
+    }
+
+    header p {
+      margin: 6px 0 0;
+      opacity: 0.9;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 30px auto;
+      padding: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+
+    .login-box {
+      max-width: 450px;
+      margin: 60px auto;
+      text-align: center;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+
+    button {
+      width: 100%;
+      padding: 13px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 8px;
+      background: #1f4e79;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    #logoutBtn {
+      background: #777;
+      max-width: 150px;
+    }
+
+    #resendBtn {
+      background: #555;
+    }
+
+    .error {
+      color: #c62828;
+      margin-top: 12px;
+    }
+
+    .success {
+      color: #2e7d32;
+      margin-top: 12px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .dashboard-header h2 {
+      margin: 0;
+    }
+
+    .status {
+      font-weight: bold;
+    }
+
+    .online {
+      color: #2e7d32;
+    }
+
+    .offline {
+      color: #c62828;
+    }
+
+    .sensor-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      margin-top: 20px;
+    }
+
+    .sensor-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+    }
+
+    .sensor-card h3 {
+      margin-top: 0;
+      font-size: 17px;
+    }
+
+    .value {
+      font-size: 32px;
+      font-weight: bold;
+      margin-top: 12px;
+    }
+
+    .unit {
+      font-size: 15px;
+      font-weight: normal;
+      color: #666;
+    }
+
+    .experimental {
+      border: 2px dashed #aaa;
+    }
+
+    .note {
+      margin-top: 20px;
+      padding: 15px;
+      background: #fff8e1;
+      border-radius: 10px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .last-update {
+      color: #555;
+      font-size: 14px;
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 24px;
+      }
+
+      .container {
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ======================================================
+       HEADER
+  ======================================================= -->
+
+  <header>
+    <h1>🦴 Osteotrack</h1>
+    <p>Experimental Physiological Monitoring Prototype</p>
+  </header>
+
+
+  <!-- ======================================================
+       LOGIN SECTION
+  ======================================================= -->
+
+  <div id="loginSection" class="container">
+
+    <div class="card login-box">
+
+      <h2>Login</h2>
+
+      <p>Login to access the Osteotrack dashboard.</p>
+
+      <input
+        type="email"
+        id="email"
+        placeholder="Email"
+      >
+
+      <input
+        type="password"
+        id="password"
+        placeholder="Password"
+      >
+
+      <button id="loginBtn">
+        Login
+      </button>
+
+      <button id="createBtn">
+        Create Account
+      </button>
+
+      <button id="resendBtn" class="hidden">
+        Resend Verification Email
+      </button>
+
+      <p id="loginMessage"></p>
+
+    </div>
+
+  </div>
+
+
+  <!-- ======================================================
+       DASHBOARD
+  ======================================================= -->
+
+  <div id="dashboardSection" class="container hidden">
+
+    <div class="card">
+
+      <div class="dashboard-header">
+
+        <div>
+          <h2>Osteotrack Dashboard</h2>
+
+          <p>
+            Device:
+            <strong>ESP32_01</strong>
+          </p>
+        </div>
+
+        <div>
+          <div id="deviceStatus" class="status offline">
+            ● OFFLINE
+          </div>
+
+          <div class="last-update">
+            Last update:
+            <span id="lastUpdate">--</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         REAL SENSOR DATA
+    =================================================== -->
+
+    <div class="card">
+
+      <h2>Live Sensor Data</h2>
+
+      <div class="sensor-grid">
+
+        <div class="sensor-card">
+
+          <h3>❤️ Heart Rate</h3>
+
+          <div class="value">
+            <span id="heartRate">--</span>
+            <span class="unit">BPM</span>
+          </div>
+
+        </div>
+
+
+        <div class="sensor-card">
+
+          <h3>🩸 SpO₂</h3>
+
+          <div class="value">
+            <span id="spo2">--</span>
+            <span class="unit">%</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         EXPERIMENTAL OSTEOTRACK PARAMETERS
+    =================================================== -->
+
+    <div class="card">
+
+      <h2>Experimental Osteotrack Indicators</h2>
+
+      <div class="sensor-grid">
+
+        <div class="sensor-card experimental">
+
+          <h3>🦴 HPF Degradation</h3>
+
+          <div class="value">
+            <span id="hpfDegradation">--</span>
+          </div>
+
+        </div>
+
+
+        <div class="sensor-card experimental">
+
+          <h3>🩸 Hypervascularization</h3>
+
+          <div class="value">
+            <span id="hypervascularization">--</span>
+          </div>
+
+        </div>
+
+
+        <div class="sensor-card experimental">
+
+          <h3>📊 Pre-symptomatic Index</h3>
+
+          <div class="value">
+            <span id="presymptomaticIndex">--</span>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="note">
+
+        <strong>Important:</strong>
+        The experimental Osteotrack indicators are not currently
+        calculated from validated clinical formulas. A value of
+        <strong>-1</strong> means that the parameter is not calculated.
+
+        This prototype does not diagnose osteoarthritis.
+
+      </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         LOGOUT
+    =================================================== -->
+
+    <div class="card">
+
+      <button id="logoutBtn">
+        Logout
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- ======================================================
+       FIREBASE
+  ======================================================= -->
+
+  <script type="module">
+
+    // ------------------------------------------------------
+    // FIREBASE IMPORTS
+    // ------------------------------------------------------
+
+    import { initializeApp }
+      from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+
+    import {
+      getDatabase,
+      ref,
+      onValue
+    }
+    from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
+
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword,
+      sendEmailVerification,
+      signOut,
+      onAuthStateChanged
+    }
+    from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+
+
+    // ------------------------------------------------------
+    // FIREBASE CONFIG
+    // ------------------------------------------------------
+    //
+    // KEEP THE SAME CONFIG YOU ARE ALREADY USING.
+    // Replace the values below with your existing Firebase
+    // web-app configuration.
+    //
+
+    const firebaseConfig = {
+
+      apiKey: "YOUR_FIREBASE_API_KEY",
+
+      authDomain: "YOUR_PROJECT.firebaseapp.com",
+
+      databaseURL: "YOUR_FIREBASE_DATABASE_URL",
+
+      projectId: "YOUR_PROJECT_ID",
+
+      storageBucket: "YOUR_STORAGE_BUCKET",
+
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+
+      appId: "YOUR_FIREBASE_APP_ID"
+
+    };
+
+
+    // ------------------------------------------------------
+    // INITIALIZE FIREBASE
+    // ------------------------------------------------------
+
+    const app = initializeApp(firebaseConfig);
+
+    const db = getDatabase(app);
+
+    const auth = getAuth(app);
+
+
+    // ------------------------------------------------------
+    // HTML ELEMENTS
+    // ------------------------------------------------------
+
+    const loginSection =
+      document.getElementById("loginSection");
+
+    const dashboardSection =
+      document.getElementById("dashboardSection");
+
+    const emailInput =
+      document.getElementById("email");
+
+    const passwordInput =
+      document.getElementById("password");
+
+    const loginBtn =
+      document.getElementById("loginBtn");
+
+    const createBtn =
+      document.getElementById("createBtn");
+
+    const resendBtn =
+      document.getElementById("resendBtn");
+
+    const logoutBtn =
+      document.getElementById("logoutBtn");
+
+    const loginMessage =
+      document.getElementById("loginMessage");
+
+
+    // ------------------------------------------------------
+    // LOGIN
+    // ------------------------------------------------------
+
+    loginBtn.addEventListener("click", async () => {
+
+      const email =
+        emailInput.value.trim();
+
+      const password =
+        passwordInput.value;
+
+      loginMessage.className = "";
+
+      loginMessage.innerText = "";
+
+
+      if (!email || !password) {
+
+        loginMessage.className = "error";
+
+        loginMessage.innerText =
+          "Please enter email and password.";
+
+        return;
+      }
+
+
+      try {
+
+        const userCredential =
+          await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+
+
+        const user =
+          userCredential.user;
+
+
+        if (!user.emailVerified) {
+
+          loginMessage.className = "error";
+
+          loginMessage.innerText =
+            "Please verify your email before logging in.";
+
+          resendBtn.classList.remove("hidden");
+
+          await signOut(auth);
+
+          return;
+        }
+
+
+        loginMessage.className = "success";
+
+        loginMessage.innerText =
+          "Login successful.";
+
+      }
+
+      catch (error) {
+
+        loginMessage.className = "error";
+
+        loginMessage.innerText =
+          error.message;
+
+      }
+
+    });
+
+
+    // ------------------------------------------------------
+    // CREATE ACCOUNT
+    // ------------------------------------------------------
+
+    createBtn.addEventListener("click", async () => {
+
+      const email =
+        emailInput.value.trim();
+
+      const password =
+        passwordInput.value;
+
+
+      if (!email || !password) {
+
+        loginMessage.className = "error";
+
+        loginMessage.innerText =
+          "Please enter email and password.";
+
+        return;
+      }
+
+
+      try {
+
+        const userCredential =
+          await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+
+
+        await sendEmailVerification(
+          userCredential.user
+        );
+
+
+        loginMessage.className = "success";
+
+        loginMessage.innerText =
+          "Account created. Verification email sent.";
+
+        await signOut(auth);
+
+      }
+
+      catch (error) {
+
+        loginMessage.className = "error";
+
+        loginMessage.innerText =
+          error.message;
+
+      }
+
+    });
+
+
+    // ------------------------------------------------------
+    // RESEND VERIFICATION EMAIL
+    // ------------------------------------------------------
+
+    resendBtn.addEventListener("click", async () => {
+
+      const email =
+        emailInput.value.trim();
+
+      const password =
+        passwordInput.value;
+
+
+      try {
+
+        const userCredential =
+          await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+
+
+        await sendEmailVerification(
+          userCredential.user
+        );
+
+
+        loginMessage.className = "success";
+
+        loginMessage.innerText =
+          "Verification email sent again.";
+
+        await signOut(auth);
+
+      }
+
+      catch (error) {
+
+        loginMessage.className = "error";
+
+        loginMessage.innerText =
+          error.message;
+
+      }
+
+    });
+
+
+    // ------------------------------------------------------
+    // LOGOUT
+    // ------------------------------------------------------
+
+    logoutBtn.addEventListener("click", async () => {
+
+      await signOut(auth);
+
+    });
+
+
+    // ------------------------------------------------------
+    // AUTH STATE
+    // ------------------------------------------------------
+
+    onAuthStateChanged(auth, (user) => {
+
+      if (user && user.emailVerified) {
+
+        loginSection.classList.add("hidden");
+
+        dashboardSection.classList.remove("hidden");
+
+        startFirebaseListener();
+
+      }
+
+      else {
+
+        loginSection.classList.remove("hidden");
+
+        dashboardSection.classList.add("hidden");
+
+      }
+
+    });
+
+
+    // ------------------------------------------------------
+    // FIREBASE REALTIME DATABASE LISTENER
+    // ------------------------------------------------------
+
+    function startFirebaseListener() {
+
+      const sensorRef =
+        ref(db, "sensorData/ESP32_01");
+
+
+      onValue(sensorRef, (snapshot) => {
+
+        const data =
+          snapshot.val();
+
+
+        if (!data) {
+
+          setOffline();
+
+          return;
+        }
+
+
+        // --------------------------------------------------
+        // REAL SENSOR DATA
+        // --------------------------------------------------
+
+        document.getElementById("heartRate").innerText =
+          data.heartRate ?? "--";
+
+
+        document.getElementById("spo2").innerText =
+          data.spo2 ?? "--";
+
+
+        // --------------------------------------------------
+        // EXPERIMENTAL PARAMETERS
+        // --------------------------------------------------
+
+        document.getElementById("hpfDegradation").innerText =
+          data.hpfDegradation ?? "--";
+
+
+        document.getElementById("hypervascularization").innerText =
+          data.hypervascularization ?? "--";
+
+
+        document.getElementById("presymptomaticIndex").innerText =
+          data.presymptomaticIndex ?? "--";
+
+
+        // --------------------------------------------------
+        // DEVICE STATUS
+        // --------------------------------------------------
+
+        const status =
+          document.getElementById("deviceStatus");
+
+        status.innerText =
+          "● ONLINE";
+
+        status.className =
+          "status online";
+
+
+        // --------------------------------------------------
+        // LAST UPDATE
+        // --------------------------------------------------
+
+        document.getElementById("lastUpdate").innerText =
+          new Date().toLocaleString();
+
+      });
+
+    }
+
+
+    // ------------------------------------------------------
+    // OFFLINE
+    // ------------------------------------------------------
+
+    function setOffline() {
+
+      const status =
+        document.getElementById("deviceStatus");
+
+      status.innerText =
+        "● OFFLINE";
+
+      status.className =
+        "status offline";
+
+
+      document.getElementById("heartRate").innerText =
+        "--";
+
+      document.getElementById("spo2").innerText =
+        "--";
+
+      document.getElementById("hpfDegradation").innerText =
+        "--";
+
+      document.getElementById("hypervascularization").innerText =
+        "--";
+
+      document.getElementById("presymptomaticIndex").innerText =
+        "--";
+
+    }
+
+  </script>
+
+</body>
+</html>

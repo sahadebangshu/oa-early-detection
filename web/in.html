@@ -241,6 +241,38 @@
 
 
 
+      <!-- HEART RATE -->
+
+      <div class="card">
+
+        <p>❤️ Heart Rate</p>
+
+        <h2>
+          <span id="heartRate">--</span>
+        </h2>
+
+        <p>BPM</p>
+
+      </div>
+
+
+
+      <!-- SPO2 -->
+
+      <div class="card">
+
+        <p>🩸 SpO₂</p>
+
+        <h2>
+          <span id="spo2">--</span>
+        </h2>
+
+        <p>%</p>
+
+      </div>
+
+
+
       <!-- DEVICE STATUS -->
 
       <div class="card">
@@ -295,7 +327,6 @@
   };
 
 
-
   /* =====================================================
      FIREBASE IMPORTS
      ===================================================== */
@@ -323,7 +354,6 @@
     from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
 
-
   /* =====================================================
      INITIALIZE FIREBASE
      ===================================================== */
@@ -333,7 +363,6 @@
   const database = getDatabase(app);
 
   const auth = getAuth(app);
-
 
 
   /* =====================================================
@@ -369,7 +398,6 @@
 
   const userEmail =
     document.getElementById("userEmail");
-
 
 
   /* =====================================================
@@ -431,7 +459,6 @@
     }
 
   });
-
 
 
   /* =====================================================
@@ -501,7 +528,6 @@
       }
 
 
-
       /* VERIFIED USER */
 
       message.innerText =
@@ -534,7 +560,6 @@
     }
 
   });
-
 
 
   /* =====================================================
@@ -610,7 +635,6 @@
   });
 
 
-
   /* =====================================================
      LOGOUT
      ===================================================== */
@@ -633,7 +657,6 @@
   });
 
 
-
   /* =====================================================
      AUTH STATE
      ===================================================== */
@@ -651,7 +674,6 @@
     }
 
   });
-
 
 
   /* =====================================================
@@ -673,7 +695,9 @@
         snapshot.val();
 
 
-      /* NO DATA */
+      /* =================================================
+         NO DATA
+         ================================================= */
 
       if (!data) {
 
@@ -689,6 +713,16 @@
 
         document.getElementById(
           "presymptomaticIndex"
+        ).innerText = "--";
+
+
+        document.getElementById(
+          "heartRate"
+        ).innerText = "--";
+
+
+        document.getElementById(
+          "spo2"
         ).innerText = "--";
 
 
@@ -715,9 +749,8 @@
       }
 
 
-
       /* =================================================
-         HPF DEGRADATION
+         OSTEOTRACK EXPERIMENTAL VALUES
          ================================================= */
 
       document.getElementById(
@@ -726,27 +759,32 @@
         data.hpfDegradation ?? "--";
 
 
-
-      /* =================================================
-         HYPERVASCULARIZATION
-         ================================================= */
-
       document.getElementById(
         "hypervascularization"
       ).innerText =
         data.hypervascularization ?? "--";
 
 
-
-      /* =================================================
-         PRE-SYMPTOMATIC INDEX
-         ================================================= */
-
       document.getElementById(
         "presymptomaticIndex"
       ).innerText =
         data.presymptomaticIndex ?? "--";
 
+
+      /* =================================================
+         REAL MAX30102 VALUES
+         ================================================= */
+
+      document.getElementById(
+        "heartRate"
+      ).innerText =
+        data.heartRate ?? "--";
+
+
+      document.getElementById(
+        "spo2"
+      ).innerText =
+        data.spo2 ?? "--";
 
 
       /* =================================================
@@ -765,9 +803,8 @@
         "status online";
 
 
-
       /* =================================================
-         CURRENT TIME
+         LAST UPDATE
          ================================================= */
 
       document.getElementById(
