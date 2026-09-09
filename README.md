@@ -290,7 +290,7 @@ Team OsteoSense
 
 Developed as a prototype for Smart India Hackathon 2026.
 
-**Team Members**
+**Team Members:**
 </p>Pritam Paul</p>
 </p>Debangshu Saha</p>
 </p>Prantik Ghosh</p>
