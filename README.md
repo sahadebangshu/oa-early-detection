@@ -314,6 +314,6 @@ Developed as a prototype for Smart India Hackathon 2026.
 | Clinical Validation      | 🔴 Future Work |
 ## Disclaimer
 
-OsteoTrack is a *research and prototype project.*
+OsteoSense is a *research and prototype project.*
 
 It is not currently a clinically validated diagnostic device and should not be used to diagnose, treat, or rule out Osteoarthritis. Any clinical application would require appropriate validation, regulatory compliance, and evaluation by qualified healthcare professionals.
