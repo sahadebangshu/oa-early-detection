@@ -2,159 +2,36 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OsteoSense | Blue Code Crew</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>OsteoSense | Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#f4f7fb; --card:#fff; --text:#172033; --muted:#7a8497;
-  --green:#14966b; --green2:#e4f7ef; --blue:#3f82f6; --blue2:#e8f0ff;
-  --red:#e9536f; --red2:#ffe8ed; --orange:#f0a52b; --orange2:#fff3dc;
-  --line:#e8edf4; --sidebar:#ffffff;
+  --bg:#eef2ef; --card:#ffffff; --ink:#16241f; --muted:#7c8a83;
+  --brand:#12805f; --brand-soft:#e2f3ec;
+  --blue:#3f7fd1; --blue-soft:#e7eefb;
+  --red:#e5485f; --red-soft:#fde9ec;
+  --amber:#e2932b; --amber-soft:#fdf1de;
+  --line:#e3e8e4;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
-.app{display:flex;min-height:100vh}
-.sidebar{width:245px;background:var(--sidebar);border-right:1px solid var(--line);padding:22px 14px;position:fixed;inset:0 auto 0 0;z-index:10}
-.brand{display:flex;align-items:center;gap:11px;padding:5px 10px 27px}
-.logo{width:40px;height:40px;border-radius:13px;background:#dff6ec;color:var(--green);display:grid;place-items:center;font-size:21px;font-weight:800}
-.brand h1{font-size:20px;margin:0}.brand small{color:var(--muted);font-size:10px;letter-spacing:.7px}
-nav a{display:flex;align-items:center;gap:13px;text-decoration:none;color:#687387;padding:12px 14px;border-radius:11px;margin:5px 0;font-size:14px;font-weight:600}
-nav a.active{background:var(--green);color:white;box-shadow:0 5px 15px #14966b25}
-nav a:hover:not(.active){background:#f3f7f5}
-.icon{width:20px;text-align:center;font-size:16px}
-.sidebar-note{position:absolute;bottom:20px;left:14px;right:14px;background:#f2f7ff;border:1px solid #e0eaff;border-radius:13px;padding:13px;color:#61708a;font-size:11px;line-height:1.45}
-.main{margin-left:245px;width:calc(100% - 245px);padding:18px 28px 35px}
-.topbar{height:54px;display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:14px}
-.search{background:white;border:1px solid var(--line);border-radius:11px;height:40px;max-width:480px;flex:1;display:flex;align-items:center;padding:0 14px;color:#a1aabc;font-size:13px}
-.search input{border:0;outline:0;width:100%;font:inherit;margin-left:8px}
-.profile{display:flex;align-items:center;gap:10px;font-size:12px}
-.avatar{width:36px;height:36px;border-radius:50%;background:#dff6ec;display:grid;place-items:center;color:var(--green);font-weight:800}
-.page-title{display:flex;align-items:end;justify-content:space-between;margin:8px 0 18px}
-.page-title h2{font-size:25px;margin:0}.page-title p{margin:5px 0 0;color:var(--muted);font-size:12px}
-.badge{background:#e7f7ef;color:var(--green);padding:7px 10px;border-radius:8px;font-size:11px;font-weight:700}
-.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:17px;box-shadow:0 2px 8px #1b2b3d06}
-.metric{display:flex;justify-content:space-between;gap:10px}.metric .label{font-size:12px;color:#647086;font-weight:600}.metric .value{font-size:27px;font-weight:800;margin-top:8px}.metric .sub{font-size:10px;color:var(--muted);margin-top:3px}
-.metric-icon{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:19px}
-.green{background:var(--green2);color:var(--green)}.blue{background:var(--blue2);color:var(--blue)}.red{background:var(--red2);color:var(--red)}.orange{background:var(--orange2);color:var(--orange)}
-.section-grid{display:grid;grid-template-columns:1.55fr 1fr;gap:14px;margin-top:14px}
-.card h3{font-size:14px;margin:0 0 5px}.muted{color:var(--muted);font-size:11px}
-.chart{height:205px;margin-top:10px;position:relative;display:flex;align-items:end;gap:10px;padding:12px 6px 25px;border-top:1px solid #f1f3f7;background:linear-gradient(#fff,#fbfcfe)}
-.bars{display:flex;align-items:end;height:160px;gap:10px;width:100%}
-.bar-wrap{flex:1;height:100%;display:flex;align-items:end;justify-content:center;gap:3px}
-.bar{width:42%;border-radius:5px 5px 2px 2px;background:#65c89e}.bar.b2{background:#77a9f6}.bar.low{height:35%}.bar.mid{height:58%}.bar.high{height:82%}.bar.vhigh{height:95%}
-.axis{position:absolute;bottom:5px;left:4px;right:4px;display:flex;justify-content:space-around;color:#a1a9b7;font-size:9px}
-.legend{display:flex;gap:14px;margin-top:5px;font-size:10px;color:#7b8495}.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px}
-.process{display:flex;align-items:center;justify-content:space-between;gap:7px;margin-top:24px}.step{flex:1;text-align:center}.step .circle{width:42px;height:42px;border-radius:50%;margin:auto;display:grid;place-items:center;background:#e8f7f1;color:var(--green);font-weight:800}.step strong{display:block;font-size:10px;margin-top:8px}.arrow{color:#bbc3d0}
-.table-card{margin-top:14px}.table{width:100%;border-collapse:collapse;margin-top:10px}.table th{font-size:9px;color:#98a1b1;text-align:left;padding:10px 8px;border-bottom:1px solid var(--line)}.table td{font-size:11px;padding:11px 8px;border-bottom:1px solid #f0f2f6}.status{padding:4px 8px;border-radius:8px;font-size:9px;font-weight:700}.online{background:#e3f7ee;color:#14835f}.watch{background:#fff2d9;color:#b4780d}.alert{background:#ffe7ec;color:#c43b58}
-.progress{height:6px;background:#edf1f5;border-radius:5px;overflow:hidden;width:85px;display:inline-block;vertical-align:middle;margin-right:6px}.progress i{display:block;height:100%;background:var(--green);border-radius:5px}.progress.warn i{background:var(--orange)}.progress.bad i{background:var(--red)}
-.prototype{display:grid;grid-template-columns:1.1fr 1fr;gap:16px;align-items:center}.prototype img{width:100%;height:230px;object-fit:cover;border-radius:12px;border:1px solid var(--line)}.facts{display:grid;gap:9px}.fact{padding:10px 12px;background:#f7f9fc;border-radius:10px}.fact b{font-size:11px}.fact span{display:block;color:var(--muted);font-size:10px;margin-top:3px}
-.footer{padding:22px 3px 5px;text-align:center;color:#9aa3b1;font-size:10px}
-.mobile-menu{display:none}
-@media(max-width:1050px){.grid{grid-template-columns:repeat(2,1fr)}.section-grid{grid-template-columns:1fr}.prototype{grid-template-columns:1fr}}
-@media(max-width:720px){
- .sidebar{transform:translateX(-100%);transition:.2s}.sidebar.open{transform:translateX(0)}
- .main{margin-left:0;width:100%;padding:12px 14px 25px}.mobile-menu{display:block;border:0;background:white;border-radius:10px;width:40px;height:40px;font-size:18px}.topbar{height:auto}.search{display:none}
- .grid{grid-template-columns:1fr 1fr;gap:9px}.card{padding:13px}.metric .value{font-size:22px}.page-title h2{font-size:20px}.page-title{align-items:start}
- .table-card{overflow:auto}.table{min-width:650px}
-}
-</style>
-</head>
-<body>
-<div class="app">
-<aside class="sidebar" id="sidebar">
-  <div class="brand"><div class="logo">🦴</div><div><h1>OsteoSense</h1><small>OA EARLY-DETECTION PROTOTYPE</small></div></div>
-  <nav>
-    <a class="active" href="#dashboard"><span class="icon">⌂</span>Dashboard</a>
-    <a href="#process"><span class="icon">⚙</span>How It Works</a>
-    <a href="#signals"><span class="icon">◈</span>Signals</a>
-    <a href="#ai"><span class="icon">✦</span>AI Analysis</a>
-    <a href="#prototype"><span class="icon">▣</span>Prototype</a>
-    
-  </nav>
-  <div class="sidebar-note"><b>Project prototype</b><br>ESP32-based sensing, local Wi-Fi transfer and phone-side data storage. Cloud storage can be optional.</div>
-</aside>
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+.app{display:flex;min-height:100%}
 
-<main class="main">
-<header class="topbar">
-  <button class="mobile-menu" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
-  <div class="search">⌕ <input placeholder="Search project, signal or module..."></div>
-  <div class="profile"><div><b>OsteoSense</b><br><span style="color:#8992a2">Project Dashboard</span></div><div class="avatar">BC</div></div>
-</header>
-
-<section id="dashboard">
-  <div class="page-title"><div><h2>OsteoSense Dashboard</h2><p>Project overview and prototype monitoring interface</p></div><span class="badge">● Prototype Online</span></div>
-  <div class="grid">
-    <div class="card metric"><div><div class="label">HPF Degradation</div><div class="value">--%</div><div class="sub">Signal-derived prototype indicator</div></div><div class="metric-icon green">🦴</div></div>
-    <div class="card metric"><div><div class="label">Hypervascularization</div><div class="value">--%</div><div class="sub">Prototype vascular indicator</div></div><div class="metric-icon red">♥</div></div>
-    <div class="card metric"><div><div class="label">Pre-symptomatic Index</div><div class="value">--%</div><div class="sub">Combined prototype index</div></div><div class="metric-icon blue">◫</div></div>
-    <div class="card metric"><div><div class="label">Device Status</div><div class="value" style="font-size:21px;color:#14966b">ONLINE</div><div class="sub">Last update: --</div></div><div class="metric-icon orange">📡</div></div>
-  </div>
-</section>
-
-<div class="section-grid" id="signals">
-  <section class="card">
-    <h3>Signal Trend Overview</h3><div class="muted">Illustrative prototype visualization — live values can be connected later.</div>
-    <div class="chart"><div class="bars">
-      <div class="bar-wrap"><i class="bar mid"></i><i class="bar b2 low"></i></div>
-      <div class="bar-wrap"><i class="bar high"></i><i class="bar b2 mid"></i></div>
-      <div class="bar-wrap"><i class="bar mid"></i><i class="bar b2 high"></i></div>
-      <div class="bar-wrap"><i class="bar vhigh"></i><i class="bar b2 mid"></i></div>
-      <div class="bar-wrap"><i class="bar high"></i><i class="bar b2 high"></i></div>
-      <div class="bar-wrap"><i class="bar mid"></i><i class="bar b2 vhigh"></i></div>
-      <div class="bar-wrap"><i class="bar low"></i><i class="bar b2 mid"></i></div>
-    </div><div class="axis"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span></div></div>
-    <div class="legend"><span><i class="dot" style="background:#65c89e"></i>HPF indicator</span><span><i class="dot" style="background:#77a9f6"></i>Vascular indicator</span></div>
-  </section>
-
-  <section class="card" id="process">
-    <h3>System Workflow</h3><div class="muted">From knee attachment to patient-side analysis</div>
-    <div class="process">
-      <div class="step"><div class="circle">1</div><strong>Knee Module</strong></div><div class="arrow">→</div>
-      <div class="step"><div class="circle">2</div><strong>Sensing</strong></div><div class="arrow">→</div>
-      <div class="step"><div class="circle">3</div><strong>Temporary Storage</strong></div><div class="arrow">→</div>
-      <div class="step"><div class="circle">4</div><strong>Local Wi-Fi</strong></div>
-    </div>
-    <div style="margin-top:22px;padding:12px;background:#f7fafc;border-radius:11px;font-size:10px;color:#697487;line-height:1.6">
-      <b style="color:#273349">Phone-side processing</b><br>
-      Data can be stored locally on the phone with permission. Cloud storage is optional, helping the prototype operate without requiring internet access.
-    </div>
-  </section>
-</div>
-
-<section class="card table-card" id="ai">
-  <h3>AI / Reference Comparison</h3>
-  <div class="muted">Prototype concept: compare collected measurements against a reference dataset representing healthy participants.</div>
-  <table class="table">
-    <thead><tr><th>PARAMETER</th><th>OBSERVED</th><th>REFERENCE</th><th>RELATION</th><th>PROTOTYPE STATUS</th></tr></thead>
-    <tbody>
-      <tr><td>HPF Degradation</td><td>--</td><td>Reference range</td><td><span class="progress"><i style="width:45%"></i></span> --</td><td><span class="status online">READY</span></td></tr>
-      <tr><td>Hypervascularization</td><td>--</td><td>Reference range</td><td><span class="progress warn"><i style="width:58%"></i></span> --</td><td><span class="status watch">MONITOR</span></td></tr>
-      <tr><td>Pre-symptomatic Index</td><td>--</td><td>Combined reference</td><td><span class="progress"><i style="width:35%"></i></span> --</td><td><span class="status online">READY</span></td></tr>
-    </tbody>
-  </table>
-</section>
-
-<section class="card table-card" id="prototype">
-  <h3>Hardware Prototype</h3>
-  <div class="muted" style="margin-bottom:12px">Current proof-of-concept hardware assembled for the OsteoSense prototype.</div>
-  <div class="prototype">
-    <img src="prototype.jpg" alt="OsteoSense ESP32 prototype">
-    <div class="facts">
-      <div class="fact"><b>Microcontroller</b><span>ESP32 development board</span></div>
-      <div class="fact"><b>Sensing module</b><span>Connected sensor module for prototype signal acquisition</span></div>
-      <div class="fact"><b>Communication</b><span>Local wireless Wi-Fi connection; internet is not required for local transfer</span></div>
-      <div class="fact"><b>Data handling</b><span>Temporary device storage followed by transfer to phone-side storage</span></div>
-      <div class="fact"><b>Cloud</b><span>Optional for future remote access and backup</span></div>
-    </div>
-  </div>
-</section>
-
-<div class="footer">OsteoSense • Educational prototype interface • Not a substitute for clinical diagnosis</div>
-</main>
-</div>
-<script>
-document.querySelectorAll('nav a').forEach(a=>a.addEventListener('click',()=>document.getElementById('sidebar').classList.remove('open')));
-</script>
-</body>
-</html>
+/* sidebar */
+.side{width:234px;background:var(--card);border-right:1px solid var(--line);padding:20px 12px;position:fixed;inset:0 auto 0 0;z-index:20;overflow-y:auto}
+.brand{display:flex;align-items:center;gap:10px;padding:6px 8px 24px}
+.brand .mark{width:36px;height:36px;border-radius:10px;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;font-weight:800;font-size:16px}
+.brand b{display:block;font-size:15px;letter-spacing:.2px}
+.brand small{display:block;color:var(--muted);font-size:9.5px;letter-spacing:.5px;margin-top:1px}
+nav a{display:flex;align-items:center;justify-content:space-between;gap:10px;text-decoration:none;color:#5a675f;padding:10px 12px;border-radius:9px;margin:3px 0;font-size:13.5px;font-weight:600}
+nav a .l{display:flex;align-items:center;gap:11px}
+nav a.active{background:var(--brand);color:#fff}
+nav a:hover:not(.active){background:#f1f5f2}
+.ic{width:18px;text-align:center;font-size:14.5px;opacity:.9}
+.pill{background:var(--red);color:#fff;font-size:10px;font-weight:700;border-radius:20px;padding:1px 7px}
